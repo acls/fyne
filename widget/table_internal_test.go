@@ -746,6 +746,35 @@ func TestTable_Select(t *testing.T) {
 	assert.Equal(t, 4, selectedRow)
 }
 
+func TestTable_ColumnWidth(t *testing.T) {
+	test.NewTempApp(t)
+	test.ApplyTheme(t, test.Theme())
+
+	table := NewTable(
+		func() (int, int) { return 5, 5 },
+		func() fyne.CanvasObject {
+			return NewLabel("placeholder")
+		},
+		func(id TableCellID, obj fyne.CanvasObject) {
+			if id.Col == 0 {
+				obj.(*Label).Text = "p"
+			} else {
+				obj.(*Label).Text = "placeholder"
+			}
+			obj.Refresh()
+		})
+
+	width, ok := table.ColumnWidth(0)
+	assert.False(t, ok)
+	assert.Equal(t, float32(0), width)
+
+	table.SetColumnWidth(0, 32)
+
+	width, ok = table.ColumnWidth(0)
+	assert.True(t, ok)
+	assert.Equal(t, float32(32), width)
+}
+
 func TestTable_SetColumnWidth(t *testing.T) {
 	test.NewTempApp(t)
 	test.ApplyTheme(t, test.Theme())

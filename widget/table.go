@@ -287,6 +287,15 @@ func (t *Table) Select(id TableCellID) {
 	}
 }
 
+// ColumnWidth returns the column width, if set.
+func (t *Table) ColumnWidth(id int) (width float32, ok bool) {
+	if t.columnWidths == nil {
+		return
+	}
+	width, ok = t.columnWidths[id]
+	return
+}
+
 // SetColumnWidth supports changing the width of the specified column. Columns normally take the width of the template
 // cell returned from the CreateCell callback. The width parameter uses the same units as a fyne.Size type and refers
 // to the internal content width not including the divider size.
